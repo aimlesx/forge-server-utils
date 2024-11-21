@@ -1,0 +1,22 @@
+services:
+  mc:
+    image: forge20_1:latest
+    build: .
+    container_name: minecraft-server
+    environment:
+      - TZ=Europe/Warsaw
+    ports:
+      - "25565:25565"
+    memswap_limit: 6gb
+    volumes:
+      - "./server:/mc/data"
+    working_dir: "/mc/data"
+    command: sh -c "sed -i.bak -r 's~(user_jvm_args)~../&~g' ../run.sh && ln -s ../libraries libraries && echo eula=true > eula.txt && ../run.sh nogui"
+    deploy:
+      resources:
+        limits:
+          cpus: 4
+          memory: 6gb
+        reservations:
+          cpus: 1
+          memory: 4gb
